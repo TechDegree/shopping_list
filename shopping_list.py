@@ -3,10 +3,24 @@
 # Enter DONE - in all caps - to quit the program
 # And, once quit, the app should show everything in the list
 
-shopping_list = []
+def show_help():
+    print("""
+Write what you want to add, and press ENTER / RETURN.
 
-print("What would you like to add?")
-print("Enter 'DONE' to stop adding items.")
+Enter 'DONE' to stop adding items.
+Enter 'SHOW' to show what is in your list.     
+Enter 'HELP' to show this menu.""")
+
+def show_list():
+    for item in shopping_list:
+        print(item) 
+
+def add_to_list(new_item):
+    shopping_list.append(new_item)
+    print("Added {}. List now has {} items.".format(new_item, len(shopping_list)))
+
+shopping_list = []
+show_help()
 
 while True:
     # ask for new item
@@ -17,20 +31,14 @@ while True:
         break
     # show shopping list
     elif new_item == "SHOW":
-        for item in shopping_list:
-            print(item)
+        show_list()
         continue
     # show HELP menu
     elif new_item == "HELP":
-        print("Enter 'DONE' to stop adding items.")
-        print("Enter 'SHOW' to show what is in your list.")         
-        print("Enter 'HELP' to show this menu.")         
+        show_help()
         continue
     
     # add new item to the list
-    shopping_list.append(new_item)
+    add_to_list(new_item)
 
 print("Here is your list: ")
-
-for item in shopping_list:
-    print(item) 
