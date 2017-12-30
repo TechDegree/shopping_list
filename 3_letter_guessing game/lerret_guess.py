@@ -23,7 +23,7 @@ words = [
 
 # game loop
 while True:
-    start = input("Press enter/return to start a new game.\n Press enter Q to quit\n>>> ")
+    start = input("Press enter/return to start a new game.\nPress Q to quit\n>>> ")
     if start.lower() == "q":
         break
 
@@ -32,34 +32,45 @@ while True:
     random_word = words[random_number]
     print(random_word)
 
-    # round up, so you can always be wrong at least 1 time
-    max_wrong_guesses = math.ceil(len(random_word) // 3) 
-    wrong_guesses = 0
+    # round up, so you can always be wrong at least 2 time
+    max_wrong_guesses = math.ceil(len(random_word) // 3) + 1
+    wrong_guesses = []
     guessed_letters = []
 
     # draw spaces for the word 
     print("_ " * len(random_word))
 
-    word_not_guessed, can_guess_wrong = True, True
+    word_not_guessed = True
 
     # guessing a word loop
-    while word_not_guessed and can_guess_wrong:
-
+    while word_not_guessed:
 
         # take a guess (letter)
         alphabat = string.ascii_lowercase
         guess = input("\nPlease choose a letter\n>>> ").lower()
 
         # add letters to guessed leters or increase wrong guesses
-        if guess in random_word:
+        if not guess.isalpha():
+            print("You have to pick one letter only!")
+            continue
+        elif guess in wrong_guesses or guess in guessed_letters:
+            print("You have already trued this one. Pick something else.")
+            continue
+        elif len(guess) != 1:
+            print("You have to pick one letter only!")
+            continue
+        elif guess in random_word:
             for letter in random_word:
                 if letter == guess:
                     guessed_letters.append(guess)
         else:
-            wrong_guesses += 1
-            print("Wrong guess. You have {}/{} wrong guesses.".format(wrong_guesses, max_wrong_guesses))
-        
-        # draw guessed letters and strikes or add counter if error
+            wrong_guesses.append(guess)
+            if max_wrong_guesses < len(wrong_guesses):
+                print("You failed. My word was {}.\n".format(random_word))
+                break
+            print("Wrong guess. You have {}/{} wrong guesses.".format(len(wrong_guesses), max_wrong_guesses))
+
+        # draw guessed letters and strikes
         for letter in random_word:
             if letter in guessed_letters:
                 print(letter, end=" ")
@@ -67,7 +78,8 @@ while True:
                 print("_", end=" ")
 
         word_not_guessed = len(guessed_letters) < len(random_word) 
-        can_guess_wrong = max_wrong_guesses >= wrong_guesses            
-    print("\n")
+        
+    else:
+        print("\n")
     # give max number of wrong guesses based on len of the word
     # print out win/lose
